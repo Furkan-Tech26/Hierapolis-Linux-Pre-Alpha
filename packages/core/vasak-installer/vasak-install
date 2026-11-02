@@ -11,7 +11,7 @@ set -euo pipefail
 # CONFIGURATION & CONSTANTS
 # ============================================================
 VERSION="0.2.0"
-DISTRO_NAME="Vaşak Linux"
+DISTRO_NAME="Vasak Linux"
 TARGET_MOUNT="/mnt"
 LOG_FILE="/var/log/vasak-install.log"
 LIVE_REPO="/opt/vasak/repo"
@@ -83,12 +83,28 @@ check_archiso() {
 
 check_internet() {
     info "Checking network connectivity..."
-    if ! curl -fsS --max-time 10 -o /dev/null https://geo.mirror.pkgbuild.com/core/os/x86_64/core.db; then
-        err "No internet access."
-        err "The Arch packages are downloaded during installation, so a network"
-        err "connection is required. Configure Wi-Fi/Ethernet with 'nmtui',"
-        err "then run 'vasak-install' again."
-        exit 1
+    local mirrors=(
+        "https://geo.mirror.pkgbuild.com/core/os/x86_64/core.db"
+        "https://mirror.rackspace.com/archlinux/core/os/x86_64/core.db"
+        "https://mirrors.kernel.org/archlinux/core/os/x86_64/core.db"
+    )
+    local ok=0
+    for m in "${mirrors[@]}"; do
+        if curl -fsS --max-time 8 -o /dev/null "$m"; then
+            ok=1
+            break
+        fi
+    done
+    if [[ $ok -eq 0 ]]; then
+        warn "No internet access detected."
+        if confirm "Continue with OFFLINE install (only base + bundled [vasak] repo)?"; then
+            OFFLINE_INSTALL=1
+            warn "Offline mode: only base packages from live system + [vasak] repo will be installed"
+            return 0
+        else
+            err "Network required for full install. Configure with 'nmtui' and retry."
+            exit 1
+        fi
     fi
     ok "Network is up"
 }
@@ -222,10 +238,10 @@ install_base() {
         vasak-artwork
     )
 
-    # Optional desktop. The Vaşak DE itself comes from the bundled [vasak]
+    # Optional desktop. The Vasak DE itself comes from the bundled [vasak]
     # repo; its Wayland/GTK runtime dependencies come from the Arch repos.
     # Xorg is only needed for the LightDM greeter.
-    if confirm "Install the Vaşak DE desktop (labwc + shell, ~1 GB)?" y; then
+    if confirm "Install the Vasak DE desktop (labwc + shell, ~1 GB)?" y; then
         packages+=(
             vasak-de-meta
             lightdm lightdm-gtk-greeter xorg-server
@@ -238,7 +254,13 @@ install_base() {
     #     the live keyring is used for verification and archlinux-keyring's
     #     hook populates the target).
     # -c: cache downloads in the live medium's RAM instead of the target disk.
-    run pacstrap -K -c "$TARGET_MOUNT" "${packages[@]}"
+    if [[ ${OFFLINE_INSTALL:-0} -eq 1 ]]; then
+        warn "Offline install: using packages from live system cache"
+        # Use packages already cached in the live system
+        run pacstrap -K -c -G -M "$TARGET_MOUNT" "${packages[@]}"
+    else
+        run pacstrap -K -c "$TARGET_MOUNT" "${packages[@]}"
+    fi
     ok "Base system installed"
 
     # Carry the bundled [vasak] repo over so the installed system can
@@ -387,7 +409,7 @@ editor no
 BOOT_EOF
 
     cat > /boot/loader/entries/vasak.conf <<ENTRY_EOF
-title   Vaşak Linux (systemd-boot)
+title   Vasak Linux (systemd-boot)
 linux   /vmlinuz-linux
 initrd  /initramfs-linux.img
 options $KERNEL_CMDLINE
@@ -413,7 +435,7 @@ if [[ "$VASAK_BOOTLOADER" -eq 2 || "$VASAK_BOOTLOADER" -eq 3 ]]; then
     cat > /etc/default/grub <<GRUB_EOF
 GRUB_DEFAULT=0
 GRUB_TIMEOUT=3
-GRUB_DISTRIBUTOR="Vaşak Linux"
+GRUB_DISTRIBUTOR="Vasak Linux"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet loglevel=3"
 GRUB_CMDLINE_LINUX="$GRUB_CMDLINE"
 GRUB_THEME="/boot/grub/themes/vasak/theme.txt"
@@ -485,7 +507,7 @@ main() {
     | |   | |   | |
     |_|   |_|   |_|
 
-  Vaşak Linux Installer v0.2.0
+  Vasak Linux Installer v0.2.0
   "Badger doesn't care. Badger installs."
 BANNER
     echo
