@@ -6,6 +6,8 @@
 base
 linux
 linux-firmware
+intel-ucode
+amd-ucode
 systemd
 systemd-sysvcompat
 mkinitcpio
