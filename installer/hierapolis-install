@@ -450,6 +450,9 @@ GRUB_EOF
         echo "GRUB_DISABLE_LINUX_UUID=true" >> /etc/default/grub
     fi
 
+    echo "== Running os-prober to detect other OSes =="
+    os-prober
+
     grub-mkconfig -o /boot/grub/grub.cfg
     echo "GRUB installed"
 fi

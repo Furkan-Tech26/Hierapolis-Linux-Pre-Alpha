@@ -74,6 +74,7 @@ reflector
 
 # === Bootloaders ===
 grub
+os-prober
 syslinux
 
 # === Compression / archives ===
