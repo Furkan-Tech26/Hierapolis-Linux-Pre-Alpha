@@ -45,6 +45,11 @@ build() {
 
 package() {
 	# Wallpaper (PNG)
+ 
+# fastfetch logo
+install -dm755 "$pkgdir/usr/share/hierapolis/"
+install -m644 "$startdir/fastfetch-logo.txt" "$pkgdir/usr/share/hierapolis/fastfetch-logo.txt"
+
 	install -dm755 "$pkgdir/usr/share/backgrounds/hierapolis/"
 	install -m644 "$srcdir/raster/default.png" "$pkgdir/usr/share/backgrounds/hierapolis/default.png"
 

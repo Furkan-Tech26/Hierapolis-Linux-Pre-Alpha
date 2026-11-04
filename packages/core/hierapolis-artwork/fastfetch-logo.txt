@@ -1,0 +1,36 @@
+# Hierapolis Linux - Colored FIGlet ASCII Logo
+# ANSI color codes for terminal
+# Usage: cat /usr/share/hierapolis/fastfetch-logo.txt
+# Or add to fastfetch config with "source": "/usr/share/hierapolis/fastfetch-logo.txt"
+
+# Color codes:
+# \033[38;2;R;G;Bm = RGB foreground
+# \033[0m = reset
+
+# Bluish for "Hierapolis": RGB(100, 150, 255) - nice blue
+# Yellowish (darker) for "Linux": RGB(200, 170, 0) - golden yellow, not too bright
+
+\033[38;2;100;150;255m        ___ ___ .__                                  .__  .__        \033[0m
+\033[38;2;100;150;255m ╱   │   ╲│__│ ________________  ______   ____ │  │ │__│ ______ \033[0m
+\033[38;2;100;150;255m╱    ~    ╲  │╱ __ ╲_  __ ╲__  ╲ ╲____ ╲ ╱  _ ╲│  │ │  │╱  ___╱\033[0m
+\033[38;2;100;150;255m╲    Y    ╱  ╲  ___╱│  │ ╲╱╱ __ ╲│  │_> >  <_> )  │_│  │╲___ ╲ \033[0m
+\033[38;2;100;150;255m ╲___│_  ╱│__│╲___  >__│  (____  ╱   __╱ ╲____╱│____╱__╱____  >\033[0m
+\033[38;2;100;150;255m       ╲╱         ╲╱           ╲╱│__│                       ╲╱ \033[0m
+\033[38;2;200;170;0m.____    .__                                                    \033[0m
+\033[38;2;200;170;0m│    │   │__│ ____  __ _____  ___                               \033[0m
+\033[38;2;200;170;0m│    │   │  │╱    ╲│  │  ╲  ╲╱  ╱                               \033[0m
+\033[38;2;200;170;0m│    │___│  │   │  ╲  │  ╱>    <                                \033[0m
+\033[38;2;200;170;0m│_______ ╲__│___│  ╱____╱╱__╱╲_ ╲                               \033[0m
+\033[38;2;200;170;0m        ╲╱       ╲╱            ╲╱ \033[0m
+
+# ============================================================
+# FASTFETCH CONFIG
+# ============================================================
+# {
+#   "logo": {
+#     "source": "/usr/share/hierapolis/fastfetch-logo.txt",
+#     "height": 12,
+#     "width": 80,
+#     "padding": { "top": 0, "left": 2, "right": 2 }
+#   }
+# }
