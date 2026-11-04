@@ -10,7 +10,7 @@
  ```
 > This is the build wiki (kinda) of the Turkish Linux Distrobution, Hierapolis Linux.
 
-  ## Foot note: if you see a bug, or encounter with a crash, pls send a report to hyper.tech.tr@gmail.com (im too poor to own a custom domain)
+   Foot note: if you see a bug, or encounter with a crash, pls send a report to hyper.tech.tr@gmail.com (im too poor to own a custom domain)
 
 ---
 
