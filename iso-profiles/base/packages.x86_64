@@ -1,5 +1,5 @@
-# Vaşak Linux base packages - minimal bootable system
-# Official Arch repos + the local [vasak] repo built by build-repo.sh
+# Hierapolis Linux base packages - minimal bootable system
+# Official Arch repos + the local [hierapolis] repo built by build-repo.sh
 # NOTE: only repo packages here. AUR packages cannot be used by mkarchiso.
 
 # === Base system ===
@@ -91,9 +91,9 @@ gnupg
 ca-certificates
 openssl
 
-# === Vaşak custom packages (from [vasak] repo) ===
-vasak-keyring
-vasak-installer
-vasak-mirrorlist
-vasak-artwork
-vasak-vpm
+# === Hierapolis custom packages (from [hierapolis] repo) ===
+hierapolis-keyring
+hierapolis-installer
+hierapolis-mirrorlist
+hierapolis-artwork
+hierapolis-vpm

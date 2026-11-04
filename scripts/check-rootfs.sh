@@ -1,13 +1,13 @@
 #!/bin/bash
 # Verify the contents of the live root filesystem (airootfs.sfs).
 # Usage: check-rootfs.sh <airootfs.sfs> [profile]
-#   profile: vasak (default), tty, base, xfce
+#   profile: hierapolis (default), tty, base, xfce
 set -uo pipefail
 
 echo "check-rootfs.sh version: 20261028-1 (grep -F fix)"
 
 SFS="${1:?usage: check-rootfs.sh <airootfs.sfs> [profile]}"
-PROFILE="${2:-vasak}"
+PROFILE="${2:-hierapolis}"
 
 # Use the system unsquashfs (installed by archiso/mkarchiso)
 UNSQ="unsquashfs"
@@ -31,29 +31,29 @@ have() {
 # Profile-specific expected files
 check_profile_files() {
 	case "$PROFILE" in
-		vasak|xfce)
+		hierapolis|xfce)
 			echo
 			echo "== live session wiring =="
 			have "etc/systemd/system/getty@tty1.service.d/autologin.conf"
 			have "root/.bash_profile"
-			have "usr/bin/vasak-session"
-			have "usr/bin/vasak-shell"
-			have "usr/bin/vasak-settings"
+			have "usr/bin/hierapolis-session"
+			have "usr/bin/hierapolis-shell"
+			have "usr/bin/hierapolis-settings"
 			have "usr/bin/labwc"
-			have "usr/share/wayland-sessions/vasak-de.desktop"
+			have "usr/share/wayland-sessions/hierapolis-de.desktop"
 
 			echo
 			echo "== desktop config + assets =="
-			have "etc/xdg/vasak/labwc/rc.xml"
-			have "etc/xdg/vasak/labwc/menu.xml"
-			have "etc/xdg/vasak/labwc/autostart"
-			have "usr/share/vasak-shell/main.py"
-			have "usr/share/vasak-shell/data/shell.css"
-			have "usr/share/vasak-shell/ipc.py"
-			have "usr/share/vasak-shell/startmenu/window.py"
-			have "usr/share/backgrounds/vasak/glass.png"
-			have "usr/share/themes/Vasak-Glass/gtk-4.0/gtk-dark.css"
-			have "usr/share/pixmaps/vasak-logo.png"
+			have "etc/xdg/hierapolis/labwc/rc.xml"
+			have "etc/xdg/hierapolis/labwc/menu.xml"
+			have "etc/xdg/hierapolis/labwc/autostart"
+			have "usr/share/hierapolis-shell/main.py"
+			have "usr/share/hierapolis-shell/data/shell.css"
+			have "usr/share/hierapolis-shell/ipc.py"
+			have "usr/share/hierapolis-shell/startmenu/window.py"
+			have "usr/share/backgrounds/hierapolis/glass.png"
+			have "usr/share/themes/Hierapolis-Glass/gtk-4.0/gtk-dark.css"
+			have "usr/share/pixmaps/hierapolis-logo.png"
 
 			echo
 			echo "== graphics stack (VMware needs vmwgfx) =="
@@ -66,13 +66,13 @@ check_profile_files() {
 			echo "== base live session =="
 			have "etc/systemd/system/getty@tty1.service.d/autologin.conf"
 			have "root/.bash_profile"
-			have "usr/bin/vasak-install"
+			have "usr/bin/hierapolis-install"
 			;;
 	esac
 
 	echo
 	echo "== offline repo =="
-	have "opt/vasak/repo/vasak.db.tar.zst"
+	have "opt/hierapolis/repo/hierapolis.db.tar.zst"
 }
 
 check_profile_files
@@ -143,11 +143,11 @@ check_file() {
 }
 
 check_file "etc/systemd/system/getty@tty1.service.d/autologin.conf" "--autologin root" "tty1 auto-logins root" "tty1 autologin missing"
-check_file "root/.bash_profile" "vasak-session" "profile starts vasak-session" "profile does not start the desktop"
+check_file "root/.bash_profile" "hierapolis-session" "profile starts hierapolis-session" "profile does not start the desktop"
 
-if [ "$PROFILE" = "vasak" ] || [ "$PROFILE" = "xfce" ]; then
-    check_file "etc/xdg/vasak/labwc/rc.xml" "<labwc_config" "rc.xml is labwc XML" "rc.xml is not labwc XML"
-    check_file "etc/xdg/vasak/labwc/autostart" "vasak-shell" "autostart launches the shell" "autostart does not launch the shell"
+if [ "$PROFILE" = "hierapolis" ] || [ "$PROFILE" = "xfce" ]; then
+    check_file "etc/xdg/hierapolis/labwc/rc.xml" "<labwc_config" "rc.xml is labwc XML" "rc.xml is not labwc XML"
+    check_file "etc/xdg/hierapolis/labwc/autostart" "hierapolis-shell" "autostart launches the shell" "autostart does not launch the shell"
 fi
 
 echo

@@ -1,0 +1,29 @@
+# Maintainer: Hierapolis Linux <twinboi@hierapolis-linux.org>
+pkgname=hierapolis-de-meta
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Hierapolis Desktop Environment — full meta-package (shell, settings, theme, session)"
+arch=('any')
+url="https://github.com/Furkan-Tech26/Hierapolis-Linux-Pre-Alpha"
+license=('GPL')
+depends=(
+	'hierapolis-shell'
+	'hierapolis-settings'
+	'hierapolis-theme'
+	'hierapolis-session'
+	'labwc'
+	'swaybg'
+	'swayidle'
+	'swaylock'
+	'wlr-randr'
+	'pipewire'
+	'wireplumber'
+	'mako'
+)
+source=()
+sha256sums=()
+
+package() {
+	# Meta-package: installs nothing of its own, just pulls dependencies
+	:
+}

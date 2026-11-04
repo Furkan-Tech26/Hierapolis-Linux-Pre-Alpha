@@ -1,0 +1,9 @@
+# Hierapolis Linux Plymouth Theme
+[Plymouth Theme]
+Name=Hierapolis Linux
+Description=Glassmorphism boot splash for Hierapolis Linux
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/hierapolis
+ScriptFile=/usr/share/plymouth/themes/hierapolis/hierapolis.script

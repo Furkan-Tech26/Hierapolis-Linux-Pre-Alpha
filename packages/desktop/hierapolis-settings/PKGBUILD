@@ -1,0 +1,38 @@
+# Maintainer: Hierapolis Linux <twinboi@hierapolis-linux.org>
+pkgname=hierapolis-settings
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Hierapolis DE — Settings application (GTK4, libadwaita, glassmorphism)"
+arch=('any')
+url="https://github.com/Furkan-Tech26/Hierapolis-Linux-Pre-Alpha"
+license=('GPL')
+depends=('gtk4' 'libadwaita' 'python-gobject' 'python-cairo' 'python-pillow' 'hierapolis-shell')
+makedepends=('rsync')
+source=()
+sha256sums=()
+
+package() {
+	# Main executable
+	install -dm755 "$pkgdir/usr/bin/"
+	cat > "$pkgdir/usr/bin/hierapolis-settings" <<'WRAPPER'
+#!/usr/bin/env python3
+import sys, os
+sys.path.insert(0, '/usr/share/hierapolis-settings')
+from main import main
+main()
+WRAPPER
+	chmod 755 "$pkgdir/usr/bin/hierapolis-settings"
+
+	# Application source (kept in app/ so it never collides with makepkg's src/)
+	install -dm755 "$pkgdir/usr/share/hierapolis-settings/"
+	rsync -a --exclude="__pycache__" --exclude="*.pyc" --exclude="*.pyo" \
+		"$startdir/app/." "$pkgdir/usr/share/hierapolis-settings/"
+
+	# Data
+	install -dm755 "$pkgdir/usr/share/hierapolis-settings/data/"
+	install -m644 "$startdir/data/settings.css" "$pkgdir/usr/share/hierapolis-settings/data/settings.css"
+
+	# Desktop entry
+	install -dm755 "$pkgdir/usr/share/applications/"
+	install -m644 "$startdir/data/hierapolis-settings.desktop" "$pkgdir/usr/share/applications/hierapolis-settings.desktop"
+}

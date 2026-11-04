@@ -1,0 +1,28 @@
+# Maintainer: Hierapolis Linux <twinboi@hierapolis-linux.org>
+pkgname=hierapolis-session
+pkgver=0.1.0
+pkgrel=2
+pkgdesc="Hierapolis DE — Session integration (labwc config, autostart, wayland-session entry)"
+arch=('any')
+url="https://github.com/Furkan-Tech26/Hierapolis-Linux-Pre-Alpha"
+license=('GPL')
+depends=('labwc' 'swaybg' 'swayidle' 'swaylock' 'wlr-randr' 'pipewire' 'wireplumber' 'hierapolis-shell' 'hierapolis-theme')
+source=()
+sha256sums=()
+
+package() {
+	# Wayland session entry
+	install -dm755 "$pkgdir/usr/share/wayland-sessions/"
+	install -m644 "$startdir/hierapolis-de.desktop" "$pkgdir/usr/share/wayland-sessions/hierapolis-de.desktop"
+
+	# labwc config
+	install -dm755 "$pkgdir/etc/xdg/hierapolis/labwc/"
+	install -m644 "$startdir/labwc/rc.xml" "$pkgdir/etc/xdg/hierapolis/labwc/rc.xml"
+	install -m644 "$startdir/labwc/menu.xml" "$pkgdir/etc/xdg/hierapolis/labwc/menu.xml"
+	install -m755 "$startdir/labwc/autostart" "$pkgdir/etc/xdg/hierapolis/labwc/autostart"
+	install -m644 "$startdir/labwc/environment" "$pkgdir/etc/xdg/hierapolis/labwc/environment"
+
+	# Session launcher
+	install -dm755 "$pkgdir/usr/bin/"
+	install -m755 "$startdir/hierapolis-session" "$pkgdir/usr/bin/hierapolis-session"
+}

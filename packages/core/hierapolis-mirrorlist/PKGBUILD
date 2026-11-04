@@ -1,0 +1,21 @@
+# Maintainer: Hierapolis Linux <twinboi@hierapolis-linux.org>
+pkgname=hierapolis-mirrorlist
+pkgver=20250101
+pkgrel=3
+pkgdesc="Hierapolis Linux mirrorlist (Turkey-first) + [hierapolis] repo setup"
+arch=('any')
+url="https://github.com/Furkan-Tech26/Hierapolis-Linux-Pre-Alpha"
+license=('GPL')
+# Replaces the stock mirrorlist package instead of colliding with it.
+provides=('pacman-mirrorlist')
+conflicts=('pacman-mirrorlist')
+backup=('etc/pacman.d/mirrorlist' 'etc/pacman.d/mirrorlist-hierapolis')
+install=hierapolis-mirrorlist.install
+source=('mirrorlist' 'mirrorlist-hierapolis' 'hierapolis-mirrorlist.install')
+sha256sums=('SKIP' 'SKIP' 'SKIP')
+
+package() {
+	install -dm755 "$pkgdir/etc/pacman.d"
+	install -m644 "$srcdir/mirrorlist" "$pkgdir/etc/pacman.d/mirrorlist"
+	install -m644 "$srcdir/mirrorlist-hierapolis" "$pkgdir/etc/pacman.d/mirrorlist-hierapolis"
+}

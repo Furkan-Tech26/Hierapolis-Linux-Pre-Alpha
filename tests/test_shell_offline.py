@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline checks for vasak-shell logic that needs no compositor.
+"""Offline checks for hierapolis-shell logic that needs no compositor.
 
 Covers the control socket (command delivery, stale-socket takeover, cleanup)
 and the config-colour -> GTK CSS conversion. Both are easy to break and hard
@@ -8,7 +8,7 @@ to notice from a screenshot, so CI runs this inside the Arch build container.
 The socket delivers commands with GLib.idle_add, so the handler only runs when
 a main loop iterates; the test pumps the context exactly like the shell does.
 
-Usage: test_shell_offline.py <path to vasak-shell app dir>
+Usage: test_shell_offline.py <path to hierapolis-shell app dir>
 """
 
 import os
@@ -19,7 +19,7 @@ import types
 
 APP = sys.argv[1] if len(sys.argv) > 1 else os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "..",
-    "packages", "desktop", "vasak-shell", "app",
+    "packages", "desktop", "hierapolis-shell", "app",
 )
 
 # Use the real PyGObject when it is available (the Arch container has it) and

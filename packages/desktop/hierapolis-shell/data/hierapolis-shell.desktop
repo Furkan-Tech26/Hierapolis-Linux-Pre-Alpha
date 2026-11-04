@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Hierapolis Shell
+GenericName=Hierapolis DE Shell
+Comment=Hierapolis Desktop Environment panel and start menu
+Exec=hierapolis-shell
+Icon=hierapolis-logo
+Terminal=false
+Type=Application
+Categories=DesktopSettings;System;
+X-GNOME-Autostart-Phase=Initialization
+X-GNOME-Autostart-Notify=true
+X-labwc-autostart=true

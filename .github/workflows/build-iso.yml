@@ -6,13 +6,13 @@ on:
       profile:
         description: "ISO profile to build"
         required: true
-        default: "vasak"
+        default: "hierapolis"
         type: choice
         options:
           - base
           - tty
           - xfce
-          - vasak
+          - hierapolis
   push:
     tags:
       - "v*"
@@ -23,17 +23,17 @@ permissions:
 # Keyed on profile as well as ref: otherwise a second profile dispatched on the
 # same branch would cancel the first build instead of running beside it.
 concurrency:
-  group: build-iso-${{ github.ref }}-${{ github.event.inputs.profile || 'vasak' }}
+  group: build-iso-${{ github.ref }}-${{ github.event.inputs.profile || 'hierapolis' }}
   cancel-in-progress: true
 
 jobs:
   build:
-    name: Build ${{ github.event.inputs.profile || 'vasak' }} ISO
+    name: Build ${{ github.event.inputs.profile || 'hierapolis' }} ISO
     runs-on: ubuntu-latest
     timeout-minutes: 180
     env:
-      PROFILE: ${{ github.event.inputs.profile || 'vasak' }}
-      VASAK_REPO_DIR: /work/vasak-repo
+      PROFILE: ${{ github.event.inputs.profile || 'hierapolis' }}
+      HIERAPOLIS_REPO_DIR: /work/hierapolis-repo
 
     steps:
       - name: Checkout
@@ -44,17 +44,17 @@ jobs:
           set -euo pipefail
 
           echo "== Installer copies must stay identical =="
-          diff -u installer/vasak-install packages/core/vasak-installer/vasak-install
+          diff -u installer/hierapolis-install packages/core/hierapolis-installer/hierapolis-install
 
           echo "== Mirrorlist copies must stay identical =="
-          diff -u packages/core/vasak-mirrorlist/mirrorlist \
+          diff -u packages/core/hierapolis-mirrorlist/mirrorlist \
                   iso-profiles/base/airootfs/etc/pacman.d/mirrorlist
 
           echo "== Shell syntax =="
           while IFS= read -r -d '' f; do
             bash -n "$f"
           done < <(find . -type f \( -name '*.sh' -o -name 'PKGBUILD' -o -name 'vpm' \
-                    -o -name 'vasak-install' -o -name 'vasak-session' \
+                    -o -name 'hierapolis-install' -o -name 'hierapolis-session' \
                     -o -name '*.install' \) -not -path './.git/*' -print0)
 
           echo "== Live boot configs =="
@@ -99,8 +99,8 @@ jobs:
           python3 - <<'PY'
           import xml.etree.ElementTree as ET
 
-          rc_path = "packages/desktop/vasak-session/labwc/rc.xml"
-          menu_path = "packages/desktop/vasak-session/labwc/menu.xml"
+          rc_path = "packages/desktop/hierapolis-session/labwc/rc.xml"
+          menu_path = "packages/desktop/hierapolis-session/labwc/menu.xml"
 
           for path, expected in ((rc_path, "labwc_config"),
                                  (menu_path, "openbox_menu")):
@@ -118,18 +118,18 @@ jobs:
           if by_key["Super_L"].get("onRelease") != "yes":
               raise SystemExit("rc.xml: Super_L must use onRelease=yes")
           action = ET.tostring(by_key["Super_L"], encoding="unicode")
-          if "vasak-shell --toggle" not in action:
-              raise SystemExit("rc.xml: Super_L does not toggle the Vaşak menu")
+          if "hierapolis-shell --toggle" not in action:
+              raise SystemExit("rc.xml: Super_L does not toggle the Hierapolis menu")
           print("rc.xml: Super_L / W-space start-menu keybinds OK")
 
-          pkgbuild = open("packages/desktop/vasak-session/PKGBUILD",
+          pkgbuild = open("packages/desktop/hierapolis-session/PKGBUILD",
                           encoding="utf-8").read()
-          session = open("packages/desktop/vasak-session/vasak-session",
+          session = open("packages/desktop/hierapolis-session/hierapolis-session",
                          encoding="utf-8").read()
           if "labwc/menu.xml" not in pkgbuild:
-              raise SystemExit("vasak-session PKGBUILD does not install menu.xml")
-          if "/etc/xdg/vasak/labwc/menu.xml" not in session:
-              raise SystemExit("vasak-session does not seed menu.xml")
+              raise SystemExit("hierapolis-session PKGBUILD does not install menu.xml")
+          if "/etc/xdg/hierapolis/labwc/menu.xml" not in session:
+              raise SystemExit("hierapolis-session does not seed menu.xml")
           print("labwc menu.xml packaging OK")
           PY
 
@@ -141,7 +141,7 @@ jobs:
           base = pathlib.Path("iso-profiles/base/airootfs")
           autologin = base / "etc/systemd/system/getty@tty1.service.d/autologin.conf"
           profile = base / "root/.bash_profile"
-          session = pathlib.Path("packages/desktop/vasak-session/vasak-session")
+          session = pathlib.Path("packages/desktop/hierapolis-session/hierapolis-session")
 
           text = autologin.read_text(encoding="utf-8")
           if "--autologin root" not in text:
@@ -150,8 +150,8 @@ jobs:
               raise SystemExit(f"{autologin}: must reset the inherited ExecStart")
 
           text = profile.read_text(encoding="utf-8")
-          if "vasak-session" not in text:
-              raise SystemExit(f"{profile}: does not start vasak-session")
+          if "hierapolis-session" not in text:
+              raise SystemExit(f"{profile}: does not start hierapolis-session")
           # copytoram removes /run/archiso/bootmnt, so the guard must be the
           # parent directory.
           if "/run/archiso" not in text:
@@ -159,7 +159,7 @@ jobs:
           if "/run/archiso/bootmnt" in text:
               raise SystemExit(
                   f"{profile}: guard must not depend on bootmnt (copytoram)")
-          if "exec vasak-session" in text:
+          if "exec hierapolis-session" in text:
               raise SystemExit(f"{profile}: must not exec, the shell is the fallback")
 
           if not session.stat().st_mode & stat.S_IXUSR:
@@ -180,7 +180,7 @@ jobs:
             -v "$GITHUB_WORKSPACE:/work" \
             -w /work \
             -e PROFILE="$PROFILE" \
-            -e VASAK_REPO_DIR="$VASAK_REPO_DIR" \
+            -e HIERAPOLIS_REPO_DIR="$HIERAPOLIS_REPO_DIR" \
             archlinux:latest bash -lc '
               set -euo pipefail
 
@@ -205,17 +205,17 @@ jobs:
           print("GTK4 + gtk4-layer-shell keyboard API OK")
           PY
 
-              echo "== vasak-shell import smoke test =="
-              PYTHONPATH=/work/packages/desktop/vasak-shell/app python - <<"PY"
+              echo "== hierapolis-shell import smoke test =="
+              PYTHONPATH=/work/packages/desktop/hierapolis-shell/app python - <<"PY"
           import main, ipc
           assert main.main(["--version"]) == 0
           assert callable(ipc.send_command)
-          print("vasak-shell modules import OK")
+          print("hierapolis-shell modules import OK")
           PY
 
-              echo "== vasak-shell offline unit tests =="
+              echo "== hierapolis-shell offline unit tests =="
               python /work/tests/test_shell_offline.py \
-                /work/packages/desktop/vasak-shell/app
+                /work/packages/desktop/hierapolis-shell/app
 
               echo "== Preparing build user =="
               id builder &>/dev/null || useradd -m builder
@@ -224,9 +224,9 @@ jobs:
               WORK_GID="$(stat -c %g /work)"
               chown -R builder:builder /work
 
-              echo "== Building [vasak] package repo =="
+              echo "== Building [hierapolis] package repo =="
               su -s /bin/bash builder -c \
-                "sudo env VASAK_REPO_DIR=\"$VASAK_REPO_DIR\" ./build-repo.sh"
+                "sudo env HIERAPOLIS_REPO_DIR=\"$HIERAPOLIS_REPO_DIR\" ./build-repo.sh"
 
               echo "== Final bytecode sweep before ISO build =="
               find /work -type d -name "__pycache__" -print -exec rm -rf {} + 2>/dev/null || true
@@ -277,13 +277,13 @@ jobs:
       - name: Upload ISO artifact
         uses: actions/upload-artifact@v4
         with:
-          name: vasak-iso-${{ github.event.inputs.profile || 'vasak' }}
+          name: hierapolis-iso-${{ github.event.inputs.profile || 'hierapolis' }}
           path: iso-profiles/*/out/*.iso
           if-no-files-found: error
           retention-days: 14
 
       - name: Build summary
         run: |
-          echo "### Vaşak Linux ISO build" >> "$GITHUB_STEP_SUMMARY"
+          echo "### Hierapolis Linux ISO build" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           ls -lh iso-profiles/*/out/*.iso >> "$GITHUB_STEP_SUMMARY" || true

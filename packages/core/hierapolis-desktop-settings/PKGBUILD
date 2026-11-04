@@ -1,0 +1,31 @@
+# Maintainer: Hierapolis Linux <twinboi@hierapolis-linux.org>
+pkgname=hierapolis-desktop-settings
+pkgver=20250101
+pkgrel=2
+pkgdesc="Hierapolis Linux desktop settings (XFCE + future custom DE)"
+arch=('any')
+url="https://github.com/Furkan-Tech26/Hierapolis-Linux-Pre-Alpha"
+license=('GPL')
+depends=('xfconf' 'lightdm' 'lightdm-gtk-greeter' 'adw-gtk-theme' 'papirus-icon-theme' 'noto-fonts' 'noto-fonts-emoji')
+install=hierapolis-desktop-settings.install
+source=(
+    'hierapolis-desktop-settings.install'
+    '10-hierapolis-xfce.conf'
+    'lightdm.conf'
+    'lightdm-gtk-greeter.conf'
+)
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+package() {
+    # XFCE settings
+    install -dm755 "$pkgdir/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/"
+    install -m644 "$srcdir/10-hierapolis-xfce.conf" "$pkgdir/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml"
+
+	# LightDM settings
+	# Installed under /usr/share/hierapolis and copied by the .install script so the
+	# package does not ship files owned by lightdm / lightdm-gtk-greeter
+	# (same-transaction file conflicts would make pacstrap fail).
+	install -dm755 "$pkgdir/usr/share/hierapolis/lightdm/"
+	install -m644 "$srcdir/lightdm.conf" "$pkgdir/usr/share/hierapolis/lightdm/lightdm.conf"
+	install -m644 "$srcdir/lightdm-gtk-greeter.conf" "$pkgdir/usr/share/hierapolis/lightdm/lightdm-gtk-greeter.conf"
+}

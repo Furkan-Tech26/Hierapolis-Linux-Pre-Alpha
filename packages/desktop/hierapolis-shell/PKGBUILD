@@ -1,0 +1,37 @@
+# Maintainer: Hierapolis Linux <twinboi@hierapolis-linux.org>
+pkgname=hierapolis-shell
+pkgver=0.1.0
+pkgrel=4
+pkgdesc="Hierapolis DE — Panel and Start Menu shell (GTK4, Wayland)"
+arch=('any')
+url="https://github.com/Furkan-Tech26/Hierapolis-Linux-Pre-Alpha"
+license=('GPL')
+depends=('gtk4' 'gtk4-layer-shell' 'python-gobject' 'python-cairo' 'python-pyxdg' 'python-pillow')
+source=()
+sha256sums=()
+
+package() {
+	# Main executable
+	install -dm755 "$pkgdir/usr/bin/"
+	cat > "$pkgdir/usr/bin/hierapolis-shell" <<'WRAPPER'
+#!/usr/bin/env python3
+import sys, os
+sys.path.insert(0, '/usr/share/hierapolis-shell')
+from main import main
+sys.exit(main())
+WRAPPER
+	chmod 755 "$pkgdir/usr/bin/hierapolis-shell"
+
+	# Application source (kept in app/ so it never collides with makepkg's src/)
+	install -dm755 "$pkgdir/usr/share/hierapolis-shell/"
+	rsync -a --exclude="__pycache__" --exclude="*.pyc" --exclude="*.pyo" \
+		"$startdir/app/." "$pkgdir/usr/share/hierapolis-shell/"
+
+	# Data
+	install -dm755 "$pkgdir/usr/share/hierapolis-shell/data/"
+	install -m644 "$startdir/data/shell.css" "$pkgdir/usr/share/hierapolis-shell/data/shell.css"
+
+	# Autostart
+	install -dm755 "$pkgdir/etc/xdg/autostart/"
+	install -m644 "$startdir/data/hierapolis-shell.desktop" "$pkgdir/etc/xdg/autostart/hierapolis-shell.desktop"
+}

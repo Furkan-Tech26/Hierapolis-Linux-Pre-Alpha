@@ -1,11 +1,11 @@
 
-   Vasak Linux — Live Environment
+   Hierapolis Linux — Live Environment
    ==============================
 
-   Install:   vasak-install
+   Install:   hierapolis-install
    Package:   vpm -Syu          (pacman wrapper)
-   Desktop:   systemctl start lightdm   (xfce / vasak ISOs)
-              vasak-session             (Vasak DE from tty, labwc)
+   Desktop:   systemctl start lightdm   (xfce / hierapolis ISOs)
+              hierapolis-session             (Hierapolis DE from tty, labwc)
 
    Root login has no password on the live medium.
 

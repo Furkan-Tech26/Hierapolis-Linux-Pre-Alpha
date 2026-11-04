@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
 #
-# Vasak Linux TTY profile definition for archiso
+# Hierapolis Linux TTY profile definition for archiso
 # Minimal CLI-only variant — composes on top of the base profile
 #
 
-profile_name="vasak-tty"
-profile_description="Vasak Linux TTY - Pure CLI, no GUI"
+profile_name="hierapolis-tty"
+profile_description="Hierapolis Linux TTY - Pure CLI, no GUI"
 
 arch="x86_64"
 
-iso_name="vasak-tty"
-iso_label="VASAK_TTY_$(date +%Y%m)"
-iso_publisher="Vasak Linux <https://github.com/Furkan-Tech26/Vasak-Linux-Pre-Alpha>"
-iso_application="Vasak Linux TTY Install ISO"
+iso_name="hierapolis-tty"
+iso_label="HIERAPOLIS_TTY_$(date +%Y%m)"
+iso_publisher="Hierapolis Linux <https://github.com/Furkan-Tech26/Hierapolis-Linux-Pre-Alpha>"
+iso_application="Hierapolis Linux TTY Install ISO"
 iso_version="$(date +%Y.%m.%d)"
 
-install_dir="vasak"
+install_dir="hierapolis"
 
 buildmodes=('iso')
 bootmodes=('bios.syslinux' 'uefi.systemd-boot')

@@ -1,24 +1,24 @@
 #!/usr/bin/env bash
 #
-# build-iso.sh — Master build script for Vaşak Linux ISOs
+# build-iso.sh — Master build script for Hierapolis Linux ISOs
 # Run in Arch VM AFTER running build-repo.sh
 #
 # Usage (in VM):
-#   cd ~/vasak-linux
-#   sudo ./build-iso.sh [base|tty|xfce|vasak]
-#   sudo ./build-iso.sh [base|tty|xfce|vasak] --clean
+#   cd ~/hierapolis-linux
+#   sudo ./build-iso.sh [base|tty|xfce|hierapolis]
+#   sudo ./build-iso.sh [base|tty|xfce|hierapolis] --clean
 #
 # How it works:
 #   archiso has no profile inheritance, so this script composes a staging
 #   profile: base airootfs/efiboot/syslinux + variant packages & overlays.
-#   A build-time pacman.conf points [vasak] at the local repo built by
+#   A build-time pacman.conf points [hierapolis] at the local repo built by
 #   build-repo.sh, so mkarchiso can install the custom packages.
 #
 
 set -euo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_DIR="${VASAK_REPO_DIR:-$HOME/vasak-repo}"
+REPO_DIR="${HIERAPOLIS_REPO_DIR:-$HOME/hierapolis-repo}"
 PROFILE="${1:-base}"
 CLEAN=false
 
@@ -31,8 +31,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 case "$PROFILE" in
-	base|tty|xfce|vasak) ;;
-	*) echo "Usage: $0 [base|tty|xfce|vasak] [--clean]"; exit 1 ;;
+	base|tty|xfce|hierapolis) ;;
+	*) echo "Usage: $0 [base|tty|xfce|hierapolis] [--clean]"; exit 1 ;;
 esac
 
 BASE_DIR="$PROJECT_DIR/iso-profiles/base"
@@ -42,7 +42,7 @@ STAGE_DIR="$BUILD_ROOT/profile-$PROFILE"
 WORK_DIR="$BUILD_ROOT/work-$PROFILE"
 OUT_DIR="$VARIANT_DIR/out"
 
-echo "=== Vaşak Linux ISO Builder ==="
+echo "=== Hierapolis Linux ISO Builder ==="
 echo "Profile: $PROFILE"
 echo "Project: $PROJECT_DIR"
 echo "Repo:    $REPO_DIR"
@@ -57,9 +57,9 @@ echo ""
 command -v mkarchiso &>/dev/null || { echo "Install archiso: pacman -S archiso"; exit 1; }
 command -v rsync &>/dev/null || { echo "Install rsync: pacman -S rsync"; exit 1; }
 
-if [[ ! -f "$REPO_DIR/vasak.db.tar.zst" ]]; then
+if [[ ! -f "$REPO_DIR/hierapolis.db.tar.zst" ]]; then
 	echo "Local repo not found at $REPO_DIR"
-	echo "Run ./build-repo.sh first (or set VASAK_REPO_DIR)."
+	echo "Run ./build-repo.sh first (or set HIERAPOLIS_REPO_DIR)."
 	exit 1
 fi
 
@@ -103,7 +103,7 @@ else
 fi
 
 # --- Build-time pacman.conf with the local repo -----------------------
-echo "[2/5] Writing build pacman.conf (local [vasak] repo)..."
+echo "[2/5] Writing build pacman.conf (local [hierapolis] repo)..."
 cat > "$STAGE_DIR/pacman.conf" <<EOF
 [options]
 Architecture = auto
@@ -122,24 +122,24 @@ Include = /etc/pacman.d/mirrorlist
 [multilib]
 Include = /etc/pacman.d/mirrorlist
 
-[vasak]
+[hierapolis]
 SigLevel = Optional TrustAll
 Server = file://$REPO_DIR
 EOF
 
 # --- Ship the local packages inside the live ISO -----------------------
 # mkarchiso wipes /var/cache/pacman/pkg, so use a dedicated persistent path.
-# The live system (and the text installer) can then install [vasak] packages
-# offline via file:///opt/vasak/repo.
-echo "[3/5] Vendoring local [vasak] repo into the live ISO..."
-LIVE_REPO="$STAGE_DIR/airootfs/opt/vasak/repo"
+# The live system (and the text installer) can then install [hierapolis] packages
+# offline via file:///opt/hierapolis/repo.
+echo "[3/5] Vendoring local [hierapolis] repo into the live ISO..."
+LIVE_REPO="$STAGE_DIR/airootfs/opt/hierapolis/repo"
 mkdir -p "$LIVE_REPO"
-cp -a "$REPO_DIR"/vasak.db* "$REPO_DIR"/vasak.files* "$LIVE_REPO"/ 2>/dev/null || true
+cp -a "$REPO_DIR"/hierapolis.db* "$REPO_DIR"/hierapolis.files* "$LIVE_REPO"/ 2>/dev/null || true
 cp -a "$REPO_DIR"/*.pkg.tar.zst "$LIVE_REPO"/
 
 cat > "$STAGE_DIR/airootfs/etc/pacman.d/mirrorlist-core" <<'EOF'
-# Vaşak Linux [vasak] repository — bundled inside the live ISO
-Server = file:///opt/vasak/repo
+# Hierapolis Linux [hierapolis] repository — bundled inside the live ISO
+Server = file:///opt/hierapolis/repo
 EOF
 
 # --- Enable live services ---------------------------------------------
@@ -148,7 +148,7 @@ mkdir -p "$WANTS"
 ln -sf /usr/lib/systemd/system/NetworkManager.service "$WANTS/NetworkManager.service"
 # NOTE: lightdm is installed on desktop variants but not enabled on the live
 # medium: there is no live user yet, so the ISO boots to a root TTY where you
-# can run `vasak-install` (or `systemctl start lightdm` to poke the greeter).
+# can run `hierapolis-install` (or `systemctl start lightdm` to poke the greeter).
 
 # --- Build ------------------------------------------------------------
 echo "[4/5] Building ISO with mkarchiso..."

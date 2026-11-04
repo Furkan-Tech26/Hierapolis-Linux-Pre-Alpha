@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Vaşak Linux — runs inside the ISO root after pacstrap (archiso).
+# Hierapolis Linux — runs inside the ISO root after pacstrap (archiso).
 # Keep it idempotent and non-interactive.
 
 set -euo pipefail
@@ -21,19 +21,19 @@ pacman-key --populate archlinux
 # picked up even if the kernel package's install hook ran before it existed.
 mkinitcpio -P
 
-# Make sure the live environment can use the bundled [vasak] repo even if a
+# Make sure the live environment can use the bundled [hierapolis] repo even if a
 # package reinstalled /etc/pacman.conf during pacstrap.
 cat > /etc/pacman.d/mirrorlist-core <<'EOF'
-# Vaşak Linux [vasak] repository — bundled inside the live ISO
-Server = file:///opt/vasak/repo
+# Hierapolis Linux [hierapolis] repository — bundled inside the live ISO
+Server = file:///opt/hierapolis/repo
 EOF
 
 # Write the final live pacman.conf explicitly. pacstrap may have replaced the
-# airootfs copy with the stock one (which would drop multilib and [vasak]), so
+# airootfs copy with the stock one (which would drop multilib and [hierapolis]), so
 # do not depend on which file survived.
 cat > /etc/pacman.conf <<'EOF'
 #
-# /etc/pacman.conf — Vaşak Linux live medium
+# /etc/pacman.conf — Hierapolis Linux live medium
 #
 
 [options]
@@ -53,7 +53,7 @@ Include = /etc/pacman.d/mirrorlist
 [multilib]
 Include = /etc/pacman.d/mirrorlist
 
-[vasak]
+[hierapolis]
 SigLevel = Optional TrustAll
 Include = /etc/pacman.d/mirrorlist-core
 EOF

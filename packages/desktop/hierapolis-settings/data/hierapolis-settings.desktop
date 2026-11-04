@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Hierapolis Settings
+GenericName=Settings
+Comment=Hierapolis Desktop Environment settings
+Exec=hierapolis-settings
+Icon=hierapolis-settings
+Terminal=false
+Type=Application
+Categories=Settings;DesktopSettings;
+X-GNOME-Autostart-Phase=Initialization

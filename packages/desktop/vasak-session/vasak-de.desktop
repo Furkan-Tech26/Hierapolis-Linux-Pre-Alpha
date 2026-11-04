@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=Vaşak DE
-Comment=Vaşak Desktop Environment (labwc Wayland compositor)
-Exec=vasak-session
-Type=Application
-DesktopNames=Vaşak
-Keywords=wayland;labwc;vasak;

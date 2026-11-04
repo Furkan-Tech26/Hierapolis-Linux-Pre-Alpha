@@ -4,15 +4,15 @@
 # for Calamares (requires librsvg)
 #
 # Usage (in VM):
-#   cd ~/vasak-linux
+#   cd ~/hierapolis-linux
 #   ./convert-branding.sh
 #
 
 set -euo pipefail
 
-BRANDING_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/packages/core/vasak-calamares/branding/vasak"
+BRANDING_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/packages/core/hierapolis-calamares/branding/hierapolis"
 
-echo "=== Converting Vaşak Calamares Branding SVG → PNG ==="
+echo "=== Converting Hierapolis Calamares Branding SVG → PNG ==="
 echo "Dir: $BRANDING_DIR"
 
 # Check for rsvg-convert
@@ -43,5 +43,5 @@ echo ""
 echo "=== Done ==="
 ls -lh *.png
 echo ""
-echo "Now rebuild vasak-calamares package to include PNGs:"
-echo "  cd ~/vasak-linux/packages/core/vasak-calamares && makepkg -si"
+echo "Now rebuild hierapolis-calamares package to include PNGs:"
+echo "  cd ~/hierapolis-linux/packages/core/hierapolis-calamares && makepkg -si"

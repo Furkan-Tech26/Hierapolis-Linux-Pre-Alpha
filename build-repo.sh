@@ -1,42 +1,42 @@
 #!/usr/bin/env bash
 #
 # build-repo.sh — Run ONCE in your Arch VM to build all custom packages
-# and create a local [vasak] repo that the ISO build can use.
+# and create a local [hierapolis] repo that the ISO build can use.
 #
 # Usage (in VM):
-#   cp -r /mnt/hgfs/vasak-linux ~/vasak-linux
-#   cd ~/vasak-linux
+#   cp -r /mnt/hgfs/hierapolis-linux ~/hierapolis-linux
+#   cd ~/hierapolis-linux
 #   sudo ./build-repo.sh
 #
 # Environment:
-#   VASAK_REPO_DIR — override the repo output directory (default: ~/vasak-repo)
+#   HIERAPOLIS_REPO_DIR — override the repo output directory (default: ~/hierapolis-repo)
 #
 
 set -euo pipefail
 
-REPO_DIR="${VASAK_REPO_DIR:-$HOME/vasak-repo}"
+REPO_DIR="${HIERAPOLIS_REPO_DIR:-$HOME/hierapolis-repo}"
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Core packages (from packages/core/)
 CORE_PKGS=(
-	"vasak-keyring"
-	"vasak-mirrorlist"
-	"vasak-installer"
-	"vasak-desktop-settings"
-	"vasak-artwork"
-	"vasak-vpm"
+	"hierapolis-keyring"
+	"hierapolis-mirrorlist"
+	"hierapolis-installer"
+	"hierapolis-desktop-settings"
+	"hierapolis-artwork"
+	"hierapolis-vpm"
 )
 
 # Desktop Environment packages (from packages/desktop/)
 DESKTOP_PKGS=(
-	"vasak-shell"
-	"vasak-settings"
-	"vasak-theme"
-	"vasak-session"
-	"vasak-de-meta"
+	"hierapolis-shell"
+	"hierapolis-settings"
+	"hierapolis-theme"
+	"hierapolis-session"
+	"hierapolis-de-meta"
 )
 
-echo "=== Vaşak Linux: Building Custom Package Repo ==="
+echo "=== Hierapolis Linux: Building Custom Package Repo ==="
 echo "Project: $PROJECT_DIR"
 echo "Repo dir: $REPO_DIR"
 echo ""
@@ -63,7 +63,7 @@ mkdir -p "$REPO_DIR"
 cd "$REPO_DIR"
 
 # Start clean so removed/renamed packages don't linger in the DB
-rm -f "$REPO_DIR"/*.pkg.tar.zst "$REPO_DIR"/vasak.db* "$REPO_DIR"/vasak.files*
+rm -f "$REPO_DIR"/*.pkg.tar.zst "$REPO_DIR"/hierapolis.db* "$REPO_DIR"/hierapolis.files*
 
 # Build each package
 echo "[2/4] Building packages..."
@@ -109,35 +109,35 @@ done
 # Create repo database
 echo "[3/4] Creating repo database..."
 cd "$REPO_DIR"
-repo-add vasak.db.tar.zst ./*.pkg.tar.zst
+repo-add hierapolis.db.tar.zst ./*.pkg.tar.zst
 
 # Optional repo signing. Off by default: the ISO and the installed system use
-# `SigLevel = Optional TrustAll` for [vasak], and an ephemeral CI key only adds
-# failure modes. Enable with VASAK_SIGN_REPO=1 when publishing the repo.
+# `SigLevel = Optional TrustAll` for [hierapolis], and an ephemeral CI key only adds
+# failure modes. Enable with HIERAPOLIS_SIGN_REPO=1 when publishing the repo.
 echo "[4/4] Signing repo..."
-if [[ "${VASAK_SIGN_REPO:-0}" == "1" ]]; then
-	if ! gpg --batch --list-keys "Vaşak Linux Build" &>/dev/null; then
-		cat > /tmp/vasak-key-gen <<'EOF'
-%echo Generating Vaşak Linux Build Key
+if [[ "${HIERAPOLIS_SIGN_REPO:-0}" == "1" ]]; then
+	if ! gpg --batch --list-keys "Hierapolis Linux Build" &>/dev/null; then
+		cat > /tmp/hierapolis-key-gen <<'EOF'
+%echo Generating Hierapolis Linux Build Key
 Key-Type: RSA
 Key-Length: 4096
 Subkey-Type: RSA
 Subkey-Length: 4096
-Name-Real: Vaşak Linux Build
-Name-Email: build@vasak-linux.org
+Name-Real: Hierapolis Linux Build
+Name-Email: build@hierapolis-linux.org
 Expire-Date: 0
 %no-protection
 %commit
 %echo Done
 EOF
-		gpg --batch --generate-key /tmp/vasak-key-gen
-		rm -f /tmp/vasak-key-gen
+		gpg --batch --generate-key /tmp/hierapolis-key-gen
+		rm -f /tmp/hierapolis-key-gen
 	fi
 
-	gpg --batch --yes --detach-sign --armor vasak.db.tar.zst
-	gpg --batch --yes --detach-sign --armor vasak.files.tar.zst
+	gpg --batch --yes --detach-sign --armor hierapolis.db.tar.zst
+	gpg --batch --yes --detach-sign --armor hierapolis.files.tar.zst
 else
-	echo "  Signing skipped (set VASAK_SIGN_REPO=1 to enable)"
+	echo "  Signing skipped (set HIERAPOLIS_SIGN_REPO=1 to enable)"
 fi
 
 echo ""
@@ -146,4 +146,4 @@ echo "Location: $REPO_DIR"
 echo "Packages:"
 ls -1 ./*.pkg.tar.zst
 echo ""
-echo "Next: build an ISO with ./build-iso.sh [base|tty|xfce|vasak]"
+echo "Next: build an ISO with ./build-iso.sh [base|tty|xfce|hierapolis]"

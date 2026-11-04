@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<!--
+  Hierapolis Linux — labwc compositor configuration
+  Openbox-3.6 compatible XML. See labwc-config(5).
+-->
+<labwc_config>
+
+  <core>
+    <decoration>server</decoration>
+    <gap>8</gap>
+    <adaptiveSync>no</adaptiveSync>
+    <allowTearing>no</allowTearing>
+    <autoEnableOutputs>yes</autoEnableOutputs>
+  </core>
+
+  <placement>
+    <policy>center</policy>
+  </placement>
+
+  <theme>
+    <fallbackAppIcon>hierapolis-logo</fallbackAppIcon>
+    <cornerRadius>10</cornerRadius>
+    <keepBorder>yes</keepBorder>
+    <dropShadows>yes</dropShadows>
+    <titlebar>
+      <layout>icon:iconify,max,close</layout>
+      <showTitle>yes</showTitle>
+    </titlebar>
+    <font place="ActiveWindow">
+      <name>Noto Sans</name>
+      <size>10</size>
+      <slant>normal</slant>
+      <weight>bold</weight>
+    </font>
+    <font place="InactiveWindow">
+      <name>Noto Sans</name>
+      <size>10</size>
+      <slant>normal</slant>
+      <weight>normal</weight>
+    </font>
+    <font place="MenuHeader">
+      <name>Noto Sans</name>
+      <size>10</size>
+      <slant>normal</slant>
+      <weight>bold</weight>
+    </font>
+    <font place="MenuItem">
+      <name>Noto Sans</name>
+      <size>10</size>
+      <slant>normal</slant>
+      <weight>normal</weight>
+    </font>
+    <font place="OnScreenDisplay">
+      <name>Noto Sans</name>
+      <size>10</size>
+      <slant>normal</slant>
+      <weight>bold</weight>
+    </font>
+  </theme>
+
+  <desktops>
+    <popupTime>800</popupTime>
+    <names>
+      <name>Desktop 1</name>
+      <name>Desktop 2</name>
+      <name>Desktop 3</name>
+      <name>Desktop 4</name>
+    </names>
+  </desktops>
+
+  <keyboard>
+    <default />
+    <repeatRate>25</repeatRate>
+    <repeatDelay>300</repeatDelay>
+
+    <!-- Windows 8.1 style: tap Super to toggle the full-screen start menu -->
+    <keybind key="Super_L" onRelease="yes">
+      <action name="Execute" command="hierapolis-shell --toggle" />
+    </keybind>
+    <keybind key="Super_R" onRelease="yes">
+      <action name="Execute" command="hierapolis-shell --toggle" />
+    </keybind>
+    <keybind key="W-space">
+      <action name="Execute" command="hierapolis-shell --toggle" />
+    </keybind>
+
+    <!-- Everyday launchers -->
+    <keybind key="W-Return">
+      <action name="Execute" command="foot" />
+    </keybind>
+    <keybind key="W-e">
+      <action name="Execute" command="thunar" />
+    </keybind>
+    <keybind key="W-i">
+      <action name="Execute" command="hierapolis-settings" />
+    </keybind>
+    <keybind key="W-l">
+      <action name="Execute" command="swaylock -f -c 1e1e24" />
+    </keybind>
+    <keybind key="W-S-r">
+      <action name="Reconfigure" />
+    </keybind>
+
+    <!-- Volume keys via WirePlumber (pipewire is part of the Hierapolis DE) -->
+    <keybind key="XF86AudioRaiseVolume">
+      <action name="Execute" command="wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+" />
+    </keybind>
+    <keybind key="XF86AudioLowerVolume">
+      <action name="Execute" command="wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-" />
+    </keybind>
+    <keybind key="XF86AudioMute">
+      <action name="Execute" command="wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle" />
+    </keybind>
+  </keyboard>
+
+  <windowRules>
+    <windowRule identifier="hierapolis-settings">
+      <action name="ResizeTo" width="960" height="640" />
+    </windowRule>
+  </windowRules>
+
+  <menu>
+    <showIcons>yes</showIcons>
+  </menu>
+
+</labwc_config>

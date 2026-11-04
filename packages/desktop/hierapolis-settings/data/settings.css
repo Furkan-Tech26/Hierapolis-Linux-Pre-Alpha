@@ -1,0 +1,21 @@
+/* Hierapolis Settings — glassmorphism styles */
+
+.settings-sidebar {
+    min-width: 220px;
+    background-color: rgba(31, 31, 36, 0.7);
+    border-right: 1px solid rgba(153, 153, 179, 0.25);
+}
+
+.settings-sidebar-row {
+    border-radius: 8px;
+    margin: 4px 8px;
+}
+
+.settings-sidebar-row:selected {
+    background-color: rgba(102, 153, 255, 0.18);
+    color: white;
+}
+
+.settings-sidebar-row:selected * {
+    color: white;
+}

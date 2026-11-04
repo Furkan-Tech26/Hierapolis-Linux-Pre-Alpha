@@ -1,27 +1,27 @@
-# Vaşak Linux Installation Guide
+# Hierapolis Linux Installation Guide
 
 ## Quick Start (from Live ISO)
 
 ```bash
-# Boot Vaşak Linux ISO (base, tty, or xfce variant)
+# Boot Hierapolis Linux ISO (base, tty, or xfce variant)
 # At the live prompt, run:
-sudo vasak-install
+sudo hierapolis-install
 ```
 
 That's it. Follow the prompts.
 
 ---
 
-## What `vasak-install` Does
+## What `hierapolis-install` Does
 
 | Step | Description |
 |------|-------------|
 | **Disk Selection** | Lists available disks (`lsblk`), you pick target |
 | **Partitioning** | GPT: 512M ESP + rest for root (optional LUKS encryption) |
 | **Formatting** | ESP → FAT32, Root → ext4 (or LUKS+ext4) |
-| **Base Install** | `pacstrap` downloads Arch packages; `[vasak]` packages come from the bundled offline repo |
+| **Base Install** | `pacstrap` downloads Arch packages; `[hierapolis]` packages come from the bundled offline repo |
 | **Configuration** | Hostname, users, passwords, locale, timezone, keymap, network |
-| **Desktop** | Optional Vaşak DE (labwc + shell) from the bundled repo |
+| **Desktop** | Optional Hierapolis DE (labwc + shell) from the bundled repo |
 | **Bootloader** | systemd-boot (UEFI) or GRUB (UEFI/BIOS) |
 | **Finish** | Ready to `reboot` |
 
@@ -34,7 +34,7 @@ That's it. Follow the prompts.
 | **RAM** | 2 GB minimum (4 GB recommended) |
 | **Disk** | 20 GB minimum (50 GB+ for desktop) |
 | **CPU** | x86_64 (UEFI or BIOS) |
-| **Internet** | **Required** — Arch packages are downloaded during install; only the `[vasak]` repo is offline |
+| **Internet** | **Required** — Arch packages are downloaded during install; only the `[hierapolis]` repo is offline |
 
 ---
 
@@ -43,12 +43,12 @@ That's it. Follow the prompts.
 ### 1. Boot the ISO
 - Ventoy / Rufus / `dd` the ISO to USB
 - Boot UEFI (preferred) or BIOS
-- Select "Vaşak Linux" from bootloader
+- Select "Hierapolis Linux" from bootloader
 - Login: `root` (no password)
 
 ### 2. Run Installer
 ```bash
-sudo vasak-install
+sudo hierapolis-install
 ```
 
 ### 3. Disk Selection
@@ -70,7 +70,7 @@ Use LUKS encryption for root? [y/N]: y
 
 ### 5. User Setup
 ```
-Hostname [vasak]: my-laptop
+Hostname [hierapolis]: my-laptop
 Username [twinboi]: furkan
 Root password: ********
 User password: ********
@@ -100,7 +100,7 @@ reboot
 
 ### First Boot
 - Remove USB
-- Select "Vaşak Linux" in systemd-boot
+- Select "Hierapolis Linux" in systemd-boot
 - Login as your user
 
 ### Enable AUR (install a helper first)
@@ -139,11 +139,11 @@ sudo systemctl enable gdm
 
 | Issue | Fix |
 |-------|-----|
-| "Not running in Vaşak Linux live ISO" | You must boot the ISO, not run from another distro |
-| "Must run as root" | Use `sudo vasak-install` |
+| "Not running in Hierapolis Linux live ISO" | You must boot the ISO, not run from another distro |
+| "Must run as root" | Use `sudo hierapolis-install` |
 | No internet during install | The installer requires network access for Arch packages; configure Wi-Fi with `nmtui` and retry |
 | Boot fails (black screen) | Try `nomodeset` kernel param: edit systemd-boot entry at boot |
-| LUKS not unlocking | Check `cryptdevice=` in `/boot/loader/entries/vasak.conf` matches PARTUUID |
+| LUKS not unlocking | Check `cryptdevice=` in `/boot/loader/entries/hierapolis.conf` matches PARTUUID |
 
 ---
 
@@ -165,7 +165,7 @@ mount --mkdir /dev/nvme0n1p1 /mnt/boot
 
 # 4. Install
 pacstrap -K /mnt base linux linux-firmware systemd networkmanager \
-  grub efibootmgr sudo vim vasak-keyring vasak-mirrorlist
+  grub efibootmgr sudo vim hierapolis-keyring hierapolis-mirrorlist
 
 # 5. Configure
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -180,7 +180,7 @@ exit && reboot
 
 ## Dual Boot with Windows
 
-**Not supported by the text installer yet.** `vasak-install` currently wipes the
+**Not supported by the text installer yet.** `hierapolis-install` currently wipes the
 entire selected disk (`wipefs -a` + `sgdisk -Z`), including any existing ESP and
 Windows installation. Do not select a disk that contains data you want to keep.
 
@@ -192,6 +192,6 @@ it. Automated dual-boot partitioning is a planned milestone.
 
 ## Support
 
-- **Issues**: https://github.com/Furkan-Tech26/Vasak-Linux-Pre-Alpha/issues
-- **Wiki**: https://github.com/Furkan-Tech26/Vasak-Linux-Pre-Alpha/wiki
-- **Matrix**: `#vasak-linux:matrix.org`
+- **Issues**: https://github.com/Furkan-Tech26/Hierapolis-Linux-Pre-Alpha/issues
+- **Wiki**: https://github.com/Furkan-Tech26/Hierapolis-Linux-Pre-Alpha/wiki
+- **Matrix**: `#hierapolis-linux:matrix.org`

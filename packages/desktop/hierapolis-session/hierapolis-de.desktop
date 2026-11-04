@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Hierapolis DE
+Comment=Hierapolis Desktop Environment (labwc Wayland compositor)
+Exec=hierapolis-session
+Type=Application
+DesktopNames=Hierapolis
+Keywords=wayland;labwc;hierapolis;

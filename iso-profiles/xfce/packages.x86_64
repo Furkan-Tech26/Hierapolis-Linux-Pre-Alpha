@@ -1,4 +1,4 @@
-# Vaşak Linux XFCE profile - extra packages on top of base
+# Hierapolis Linux XFCE profile - extra packages on top of base
 # Base list is merged in automatically by build-iso.sh
 
 # === Xorg / display stack ===
@@ -28,7 +28,7 @@ xfce4-sensors-plugin
 lightdm
 lightdm-gtk-greeter
 lightdm-gtk-greeter-settings
-vasak-desktop-settings
+hierapolis-desktop-settings
 
 # === Network Manager Applet ===
 network-manager-applet
