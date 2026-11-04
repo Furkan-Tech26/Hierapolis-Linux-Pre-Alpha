@@ -8,7 +8,9 @@
  #+#    #+#     #+#     #+#        #+#    #+# #+#     #+# #+#        #+#    #+# #+#            #+#    #+#    #+#     
 ###    ### ########### ########## ###    ### ###     ### ###         ########  ########## ########### ########       
  ```
-> This is the build wiki (kinda) of the Turkish Linux Distrobution, Hierapolis Linux (Comes from the anatolian wild cat Lynx)
+> This is the build wiki (kinda) of the Turkish Linux Distrobution, Hierapolis Linux.
+
+  ## Foot note: if you see a bug, or encounter with a crash, pls send a report to hyper.tech.tr@gmail.com (im too poor to own a custom domain)
 
 ---
 
@@ -54,7 +56,7 @@ hierapolis-linux/
 
 ## What to Push to GitHub
 
-Clone this repo into your GitHub page and push everything EXCEPT:
+Clone this repo into your GitHub page and push everything EXCEPT: (Also tag me or send me a e-mail i wanna see what other people do)
 - `iso-profiles/*/work/` — build cache (auto-generated)
 - `iso-profiles/*/out/` — ISO output files (auto-generated)
 - `*.pkg.tar.zst` — built packages (auto-generated)
@@ -84,7 +86,7 @@ Thumbs.db
 
 ---
 
-## Quick Start (in VMware Arch VM)
+## Quick Start (in Arch VM)
 
 ```bash
 # 1. Install dependencies
@@ -115,7 +117,7 @@ qemu-system-x86_64 -cdrom iso-profiles/tty/out/hierapolis-*.iso -m 2G -enable-kv
 | `build-repo.sh` | Builds all custom packages (core + desktop), creates the local repo (signing optional: `HIERAPOLIS_SIGN_REPO=1`) | user (uses sudo internally) | Once, or after package changes |
 | `build-iso.sh` | Composes the variant profile and builds the ISO (base/tty/xfce/hierapolis) | **root** (required by archiso) | Every ISO build |
 
-### CI: GitHub Actions (recommended)
+### CI: GitHub Actions 
 
 `.github/workflows/build-iso.yml` builds ISOs in an Arch Linux container on GitHub runners:
 
@@ -133,14 +135,14 @@ The finished `.iso` is uploaded as a workflow artifact (14-day retention). This 
 | **base** | `iso-profiles/base` | Minimal + installer | Custom builds, servers |
 | **tty** | `iso-profiles/tty` | = base | Pure CLI, embedded, rescue |
 | **xfce** | `iso-profiles/xfce` | + XFCE | Desktop, text installer |
-| **hierapolis** | `iso-profiles/hierapolis` | + Hierapolis DE (glassmorphism) | Full custom DE experience |
+| **hierapolis** | `iso-profiles/hierapolis` | + Hierapolis DE | Full custom DE experience |
 
 ---
 
 ## Live ISO Features
 
 - **`hierapolis-install`** — Text installer (run as root): disk → LUKS → pacstrap → systemd-boot/GRUB, with an optional Hierapolis DE install
-- **`vpm`** — Hierapolis Package Manager (pacman wrapper: `sudo vpm -S fastfetch`)
+- **`hpm`** — Hierapolis Package Manager (pacman wrapper: `sudo vpm -S <package-name>`)
 - **Offline `[hierapolis]` repo** — custom packages are bundled in the ISO (`/opt/hierapolis/repo`)
 - **Calamares GUI** — temporarily on hold: Arch dropped `calamares` from its repos, so the ISO ships the text installer until we package Calamares ourselves
 - **Turkey-first mirrors** — Veriteknik, Uber, NetCologne, 23media...
@@ -169,7 +171,7 @@ The finished `.iso` is uploaded as a workflow artifact (14-day retention). This 
 
 ## Hierapolis DE (Desktop Environment)
 
-The in-house DE is built on **labwc** (Wayland compositor) with a **GTK4 layer-shell panel** and a **Windows 8.1-style full-screen start menu**.
+The in-house DE is built on labwc (Wayland compositor) with a **GTK4 layer-shell panel** and a **Windows 8.1 style full-screen start menu**. (Dont blame me i js like the style and you can change the start menu tho) 
 
 ### Start menu
 - **Full-screen live-tile overlay** (Win 8.1 Metro look), optional compact mode
@@ -229,10 +231,10 @@ qemu-system-x86_64 -cdrom iso-profiles/hierapolis/out/hierapolis-de-*.iso -m 4G 
 1. ✅ CLI/TTY bootable ISO (this build)
 2. ✅ GRUB glassmorphism theme
 3. ✅ SVG→PNG auto-conversion in PKGBUILDs
-4. ✅ VPM (Hierapolis Package Manager) wrapper
-5. ✅ Custom Hierapolis DE (shell + settings + glassmorphism + labwc session)
+4. ✅ HPM (Hierapolis Package Manager) wrapper
+5. ✅ Custom Hierapolis DE (shell + settings + themes + labwc session)
 6. ✅ CI/CD (GitHub Actions builds ISOs on tag / manual dispatch)
-7. 🔲 Real hardware test (USB → laptop) — after the first CI ISO passes (Wish me luck pls)
-
+7. ✅ Real hardware test 
+8. 🔲 Polishing the distro("make it exist first make it good later" ahh type shi💔)
 --
-#Am i aura farming chat?
+#im 13 y/o btw holy aura💔
