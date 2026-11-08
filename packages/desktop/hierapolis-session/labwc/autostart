@@ -42,3 +42,6 @@ command -v pasystray >/dev/null 2>&1 && pasystray &
 if command -v wl-paste >/dev/null 2>&1 && command -v cliphist >/dev/null 2>&1; then
     wl-paste --watch cliphist store &
 fi
+
+# File manager daemon (for desktop icons)
+command -v thunar >/dev/null 2>&1 && thunar --daemon &
