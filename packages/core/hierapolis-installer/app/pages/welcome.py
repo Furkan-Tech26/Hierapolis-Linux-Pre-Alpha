@@ -165,7 +165,7 @@ class WelcomePage(BasePage):
 
         disks = hw_info.get("disks", [])
         if disks:
-            disk_str = ", ".join([f"{d.get(\"model\", d.get(\"name\", \"Unknown\"))} ({d.get(\"size\", \"?\")})" for d in disks[:3]])
+            disk_str = ", ".join([d.get("model", d.get("name", "Unknown")) + " (" + d.get("size", "?") + ")" for d in disks[:3]])
             items.append(("Disks", disk_str))
 
         for i, (label, value) in enumerate(items):
