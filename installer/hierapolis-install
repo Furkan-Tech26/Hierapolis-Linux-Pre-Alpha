@@ -254,6 +254,9 @@ install_base() {
     #     the live keyring is used for verification and archlinux-keyring's
     #     hook populates the target).
     # -c: cache downloads in the live medium's RAM instead of the target disk.
+    # Ensure DNS resolution works in chroot
+    cp -L /etc/resolv.conf "$TARGET_MOUNT/etc/resolv.conf" 2>/dev/null || true
+
     if [[ ${OFFLINE_INSTALL:-0} -eq 1 ]]; then
         warn "Offline install: using packages from live system cache"
         # Use packages already cached in the live system
